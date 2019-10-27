@@ -28,11 +28,7 @@ def report():
     if request.method == "GET":    
         return render_template("reportpage.html")
     elif request.method == "POST":
-        if request.form["selectinput"] == "I need help":
-            return redirect(url_for("needhelp"))
-        else:
-            return redirect(url_for("wanttohelp"))
-        return render_template("input2.html",name=request.form["tempusername"])
+        return render_template("gasLocMap.html",city=request.form["city"],state=request.form["state"],make=request.form["make"],model=request.form["model"],model_year=request.form["model_year"],licence_plate=request.form["licence_plate"],color=request.form["color"])
 
 if __name__ == "__main__":
     app.run()
