@@ -38,10 +38,10 @@
                         State {{ state }}
                     </li>
                     <li>
-                        Model {{ model }}
+                        Make {{ make }}
                     </li>
                     <li>
-                        Make {{ make }}
+                        Model {{ model }}
                     </li>
                     <li>
                         Model Year {{ model_year }}
@@ -65,12 +65,23 @@
                     zoom: 4,
                     center: myLatLng
                 });
-
+                
                 var marker = new google.maps.Marker({
                     position: myLatLng,
                     map: map,
                     title: 'Hello World!'
                 });
+                markercount = 10
+                markerlist = []
+                for(i=0;i<markercount;i++){
+                    var markerinlist = new google.maps.Marker({
+                    position: {lat: 10*i, lng: 10*i},
+                    map: map,
+                    title: 'Hello World!'
+                    });
+                    markerlist.push(markerinlist);
+                }
+                console.log(markerlist);
             }
         </script>
     </body>
