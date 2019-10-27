@@ -66,7 +66,9 @@
                 </ul>
             </div>
             <div id="third">
-                <img src = "{{ carImagesrc }}" >
+                {% for carImage in carImagesrc %}
+                <img src = "{{ carImage }}" >
+                {% endfor %}
             </div>
         </div>
         
@@ -86,6 +88,17 @@
                 zoom: 15
                 });
 
+            var cityCircle = new google.maps.Circle({
+                strokeColor: '#FF0000',
+                strokeOpacity: 0.8,
+                strokeWeight: 2,
+                fillColor: '#FF0000',
+                fillOpacity: 0.35,
+                map: map,
+                center: pyrmont,
+                radius: parseInt("{{ searchRadius }}") / 10
+            });
+
             var request = {
                 location: pyrmont,
                 radius: "{{ searchRadius }}", //Radius is in meters
@@ -100,30 +113,35 @@
             }
 
             function callback(results, status) {
+
+                
                 if (status == google.maps.places.PlacesServiceStatus.OK) {
                     for (var i = 0; i < results.length; i++) {
                         var place = results[i];
-                        createMarker(results[i]);
-                //var place_idval = 0;
-                //var requestdetail = {
-                //    placeId: place_idval,
-                //    fields: ['name', 'formatted_phone_number']
-                //};
-                //if (status == google.maps.places.PlacesServiceStatus.OK) {
-                //    for (var i = 0; i < results.length; i++) {
-                //        var place = results[i];
-                //        console.log(place)
-                //        requestdetail[place_idval] = place.place_id;
-                //        console.log(requestdetail[place_idval])
+                        createMarker(place)
+                        console.log(place)
+                        //var requestdetail = {
+                        //    placeId: place.place_id,
+                        //    fields: ['name', 'formatted_phone_number', 'geometry']
+                        //};
+                        console.log(place.vicinity)
                         //createMarker(results[i]);
-                //        service.getDetails(requestdetail, callbackinside);
+                        //service = new google.maps.places.PlacesService(map);
+                        //var infowindow = new google.maps.InfoWindow();
+                        //service.getDetails(requestdetail, function(place, status) {
+                        //    if (status === google.maps.places.PlacesServiceStatus.OK) {
+                        //        var marker = new google.maps.Marker({
+                        //        map: map,
+                        //        position: place.geometry.location
+                        //        });
+                        //        google.maps.event.addListener(marker, 'click', function() {
+                        //        infowindow.setContent('<div><strong>' + place.name + '</strong><br>' + '<br>' +
+                        //            place.formatted_phone_number + '</div>');
+                        //        infowindow.open(map, this);
+                        //        });
+                        //    }
+                        //});
                     }
-                }
-            }
-            
-            function callbackinside(place){
-                if (status == google.maps.places.PlacesServiceStatus.OK){
-                    createMarker(place)
                 }
             }
 
@@ -133,9 +151,9 @@
                 position: place.geometry.location
                 });
 
+                var infowindow = new google.maps.InfoWindow();
                 google.maps.event.addListener(marker, 'click', function() {
-                    infowindow.setContent('<div><strong>' + place.name + '</strong><br>' +
-                    place.formatted_address + '</div>');
+                    infowindow.setContent('<div><strong>' + place.name + '</strong><br>' + place.vicinity + '</div>');
                     infowindow.open(map, this);
                 });
             }
