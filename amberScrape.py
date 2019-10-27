@@ -5,7 +5,13 @@ def getVehicleImage(make="ford",model="focus",year="2012"):
     response = requests.get("https://www.autobytel.com/{}/{}/{}/pictures/".format(make,model,year))
     root = html.fromstring(response.content)
     imgserch = root.xpath("//a[contains(@id,'imageThumb')]/div/img")
-    return "https:"+imgserch[0].attrib["src"]
+    picSrcList = []
+    for pic in range(len(imgserch)):
+        if pic == 8:
+            break
+        picSrcList.append("https:"+imgserch[pic].attrib["src"])
+
+    return picSrcList
 
 def getCenterCoordinates(address="1600+Amphitheatre+Parkway",city="Mountain+View",state="CA",country="US"):
     address = address.replace(" ","+")
@@ -19,9 +25,6 @@ def getCenterCoordinates(address="1600+Amphitheatre+Parkway",city="Mountain+View
 
 def getSearchRadius(make="ford",model="focus",year="2012"):
     pageLink = "https://www.autobytel.com/{}/{}/{}/specifications/"
-    make = "ford"
-    model = "focus"
-    year = 2012
     response = requests.get(pageLink.format(make,model,year))
     root = html.fromstring(response.content)
     fuelCap = root.xpath("//div[@class='subnav-content']/ul/li/ul/li/span[contains(text(),'Fuel tank capacity:')]/following-sibling::span[contains(@class,'smaller') and contains(@class,'bold') and contains(@class,'float-right')]")
