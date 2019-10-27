@@ -30,35 +30,48 @@
                     <div id="map"></div>
             </div>
             <div id="second">Infobox
-
+                <ul>
+                    <li>
+                        City {{ city }}
+                    </li>
+                    <li>
+                        State {{ state }}
+                    </li>
+                    <li>
+                        Model {{ model }}
+                    </li>
+                    <li>
+                        Make {{ make }}
+                    </li>
+                    <li>
+                        Model Year {{ model_year }}
+                    </li>
+                    <li>
+                        Licence Plate {{ licence_plate }}
+                    </li>
+                    <li>
+                        Color {{ color }}
+                    </li>
+                </ul>
             </div>
         </div>
+        <script async defer src="https://maps.googleapis.com/maps/api/js?key=AIzaSyDTdSCWaM8oDJgvLOklr5c2jlSnEDC6Ru4&callback=initMap"
+        type="text/javascript"></script>
         <script>
             function initMap() {
-                var mapOptions = {
-                    zoom: 8,
-                    center: new google.maps.LatLng(37.5, -122),
-                    mapTypeId: 'roadmap'
-                };
+                var myLatLng = {lat: -25.363, lng: 131.044};
 
-                var map = new google.maps.Map(document.getElementById('map'), mapOptions);
+                var map = new google.maps.Map(document.getElementById('map'), {
+                    zoom: 4,
+                    center: myLatLng
+                });
 
-                var markerlist = [];
-                var markercounter = 4;
-                var markerPosition = [];
-
-                for(i=0;i<markercounter;i++){
-                    var marker = new google.maps.Marker(position: markerPosition[i],
-			        map: map,
-			        title: 'Nearby Gas Stations');
-                    markerlist.append(marker)
-                }
-                
-                
+                var marker = new google.maps.Marker({
+                    position: myLatLng,
+                    map: map,
+                    title: 'Hello World!'
+                });
             }
         </script>
-        <script async defer
-		    src="https://maps.googleapis.com/maps/api/js?key=YOUR_API_KEY&callback=initMap">
-        </script>       
     </body>
 </html>
