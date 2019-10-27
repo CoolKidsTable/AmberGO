@@ -28,7 +28,7 @@ def report():
     if request.method == "GET":    
         return render_template("reportpage.html")
     elif request.method == "POST":
-        return render_template("gasLocMap.html",city=request.form["city"],state=request.form["state"],make=request.form["make"],model=request.form["model"],model_year=request.form["model_year"],licence_plate=request.form["licence_plate"],color=request.form["color"])
+        return render_template("gasLocMap.html", street=request.form["street"],city=request.form["city"],state=request.form["state"],make=request.form["make"],model=request.form["model"],model_year=request.form["model_year"],licence_plate=request.form["licence_plate"],color=request.form["color"])
 
 if __name__ == "__main__":
     app.run()

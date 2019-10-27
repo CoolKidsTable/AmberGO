@@ -22,7 +22,7 @@
                 width: 100%;
                 height:100%;
             }
-        </style>    
+        </style>
     </head>
     <body>
         <div id="wrapper">
@@ -31,6 +31,9 @@
             </div>
             <div id="second">Infobox
                 <ul>
+                    <li>
+                        Street {{ street }}
+                    </li>
                     <li>
                         City {{ city }}
                     </li>
@@ -55,33 +58,39 @@
                 </ul>
             </div>
         </div>
-        <script async defer src="https://maps.googleapis.com/maps/api/js?key=AIzaSyDTdSCWaM8oDJgvLOklr5c2jlSnEDC6Ru4&callback=initMap"
+        
+        <script async defer src= "https://maps.googleapis.com/maps/api/js?key=AIzaSyDTdSCWaM8oDJgvLOklr5c2jlSnEDC6Ru4&libraries=places&callback=initMap"
         type="text/javascript"></script>
         <script>
-            function initMap() {
-                var myLatLng = {lat: -25.363, lng: 131.044};
+            var map;
+            var service;
+            var infowindow;
 
-                var map = new google.maps.Map(document.getElementById('map'), {
-                    zoom: 4,
-                    center: myLatLng
+            function initMap() {
+            var pyrmont = new google.maps.LatLng(-33.8665433,151.1956316);
+
+            map = new google.maps.Map(document.getElementById('map'), {
+                center: pyrmont,
+                zoom: 15
                 });
-                
-                var marker = new google.maps.Marker({
-                    position: myLatLng,
-                    map: map,
-                    title: 'Hello World!'
-                });
-                markercount = 10
-                markerlist = []
-                for(i=0;i<markercount;i++){
-                    var markerinlist = new google.maps.Marker({
-                    position: {lat: 10*i, lng: 10*i},
-                    map: map,
-                    title: 'Hello World!'
-                    });
-                    markerlist.push(markerinlist);
+
+            var request = {
+                location: pyrmont,
+                radius: '1000',
+                type: ['gas_station']
+            };
+
+            service = new google.maps.places.PlacesService(map);
+            service.nearbySearch(request, callback);
+            }
+
+            function callback(results, status) {
+            if (status == google.maps.places.PlacesServiceStatus.OK) {
+                for (var i = 0; i < results.length; i++) {
+                var place = results[i];
+                createMarker(results[i]);
                 }
-                console.log(markerlist);
+            }
             }
         </script>
     </body>
