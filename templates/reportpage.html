@@ -3,13 +3,16 @@
         
     </head>
     <body>
-        <h1>
-            Create Report
+        <h1 style = "text-align:center;">
+            Welcome to AmberGO.
         </h1><br>
-        <h2>
-            Hello {{  name  }}
-        </h2>
-        <form method = "POST">
+        <h3 style = "text-align:center;">
+            Keep Calm, we will help you find help.
+        </h3>
+        <h5 style = "text-align:center;">
+            Following is the example showing how to use this program. 
+        </h5>
+        <form method = "POST" style = "text-align:center;">
             Street <input type = "text" value = "60 Sachem St" name = "street" required><br><br>
             City <input type = "text" value = "New Haven" name = "city" required><br><br>
             State <input type = "text" value ="CT" name = "state" required><br><br>
@@ -17,8 +20,13 @@
             Model <input type = "text" value = "Focus" name = "model" required><br><br>
             Model Year <input type = "text" name = "model_year"><br><br>
             Licence Plate <input type = "text" name = "licence_plate"><br><br>
-            Color <input type = "text" value = "Red" name = "color" required><br><br>
+            Color of the Car <input type = "text" value = "Red" name = "color" required><br><br>
             <input type = "submit" value = "Submit" name = "submit"><br><br>
         </form>
+        <ul>
+            <p style = "text-align:center;">
+                 This program uses Google Web APIs to determine how far a certain's car can go before stopping for gas. It also marks all gas stations within the range.
+            </p>
+        </ul>
     </body>
 </html>
