@@ -11,12 +11,20 @@
                 width: 50%;
                 height:100%;
                 float:left; /* add this */
-                border: 2px solid red;
+                border: 2px solid black;
             }
             #second {
-                height:100%;
-                border: 2px solid green;
+                height:50%;
+                border: 2px solid black;
                 overflow: hidden; /* if you don't want #second to wrap below #first */
+            }
+            #third {
+                height:50%;
+                border: 2px solid black;
+            }
+            #fourth {
+                width: 100%;
+                height:100%;
             }
             #map {
                 width: 100%;
@@ -32,42 +40,46 @@
             <div id="second">Infobox
                 <ul>
                     <li>
-                        Street {{ street }}
+                        Street: {{ street }}
                     </li>
                     <li>
-                        City {{ city }}
+                        City: {{ city }}
                     </li>
                     <li>
-                        State {{ state }}
+                        State: {{ state }}
                     </li>
                     <li>
-                        Make {{ make }}
+                        Make: {{ make }}
                     </li>
                     <li>
-                        Model {{ model }}
+                        Model: {{ model }}
                     </li>
                     <li>
-                        Model Year {{ model_year }}
+                        Model Year: {{ model_year }}
                     </li>
                     <li>
-                        Licence Plate {{ licence_plate }}
+                        Licence Plate: {{ licence_plate }}
                     </li>
                     <li>
-                        Color {{ color }}
+                        Color: {{ color }}
                     </li>
                 </ul>
             </div>
+            <div id="third">
+                <img src = "{{ carImagesrc }}" >
+            </div>
         </div>
         
-        <script async defer src= "https://maps.googleapis.com/maps/api/js?key=AIzaSyDTdSCWaM8oDJgvLOklr5c2jlSnEDC6Ru4&libraries=places&callback=initMap"
+        <script async defer src= "https://maps.googleapis.com/maps/api/js?key=AIzaSyDTdSCWaM8oDJgvLOklr5c2jlSnEDC6Ru4&libraries=places&callback=initialize"
         type="text/javascript"></script>
         <script>
             var map;
             var service;
             var infowindow;
+            var place_id;
 
-            function initMap() {
-            var pyrmont = new google.maps.LatLng(-33.8665433,151.1956316);
+            function initialize() {
+            var pyrmont = new google.maps.LatLng("{{ centerLatitude }}" , "{{ centerLongitude }}" );
 
             map = new google.maps.Map(document.getElementById('map'), {
                 center: pyrmont,
@@ -76,22 +88,58 @@
 
             var request = {
                 location: pyrmont,
-                radius: '1000',
-                type: ['gas_station']
+                radius: "{{ searchRadius }}", //Radius is in meters
+                type: ['gas_station'],
+                //fields: ['name', 'formatted_phone_number']
             };
+
+            
 
             service = new google.maps.places.PlacesService(map);
             service.nearbySearch(request, callback);
             }
 
             function callback(results, status) {
-            if (status == google.maps.places.PlacesServiceStatus.OK) {
-                for (var i = 0; i < results.length; i++) {
-                var place = results[i];
-                createMarker(results[i]);
+                if (status == google.maps.places.PlacesServiceStatus.OK) {
+                    for (var i = 0; i < results.length; i++) {
+                        var place = results[i];
+                        createMarker(results[i]);
+                //var place_idval = 0;
+                //var requestdetail = {
+                //    placeId: place_idval,
+                //    fields: ['name', 'formatted_phone_number']
+                //};
+                //if (status == google.maps.places.PlacesServiceStatus.OK) {
+                //    for (var i = 0; i < results.length; i++) {
+                //        var place = results[i];
+                //        console.log(place)
+                //        requestdetail[place_idval] = place.place_id;
+                //        console.log(requestdetail[place_idval])
+                        //createMarker(results[i]);
+                //        service.getDetails(requestdetail, callbackinside);
+                    }
                 }
             }
+            
+            function callbackinside(place){
+                if (status == google.maps.places.PlacesServiceStatus.OK){
+                    createMarker(place)
+                }
             }
+
+            function createMarker(place) {
+                var marker = new google.maps.Marker({
+                map: map,
+                position: place.geometry.location
+                });
+
+                google.maps.event.addListener(marker, 'click', function() {
+                    infowindow.setContent('<div><strong>' + place.name + '</strong><br>' +
+                    place.formatted_address + '</div>');
+                    infowindow.open(map, this);
+                });
+            }
+        
         </script>
     </body>
 </html>
