@@ -4,31 +4,33 @@
             #wrapper {
                 width: 100%;
                 height: 80%;
-                border: 1px solid black;
+                border: none;
                 overflow: hidden; /* will contain if #first is longer than #second */
             }
             #first {
                 width: 50%;
                 height:100%;
+                border: none;
                 float:left; /* add this */
-                border: 2px solid black;
             }
             #second {
                 height:50%;
-                border: 2px solid black;
                 overflow: hidden; /* if you don't want #second to wrap below #first */
+                border: none;
             }
             #third {
                 height:50%;
-                border: 2px solid black;
+                border: none;
             }
             #fourth {
                 width: 100%;
                 height:100%;
+                border: none;
             }
             #map {
                 width: 100%;
                 height:100%;
+                border: none;
             }
         </style>
     </head>
@@ -37,7 +39,10 @@
             <div id="first">
                     <div id="map"></div>
             </div>
-            <div id="second">Infobox
+            <div id="second">
+                <h2>
+                    Infobox
+                </h2>
                 <ul>
                     <li>
                         Street: {{ street }}
