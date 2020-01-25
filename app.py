@@ -1,5 +1,5 @@
 from flask import Flask, redirect, render_template, request, url_for
-from amberScrape import getCenterCoordinates, getSearchRadius, getVehicleImage
+from amberScrape import getCenterCoordinates, getSearchRadius, getVehicleImage, fuelEconomySearchRadius, fuelEconomyVehicleImage
 
 app = Flask(__name__)
 
@@ -36,8 +36,8 @@ def report():
         coords = getCenterCoordinates(request.form["street"],request.form["city"],request.form["state"])
         latitude = coords[0]
         longitude = coords[1]
-        searchRadius = getSearchRadius(request.form["make"],request.form["model"],year)
-        carImagesrc = getVehicleImage(request.form["make"],request.form["model"],year)
+        searchRadius = fuelEconomySearchRadius(request.form["make"],request.form["model"],year)
+        carImagesrc = fuelEconomyVehicleImage(request.form["make"],request.form["model"],year)
         return render_template("gasLocMap.html", centerLatitude=latitude, centerLongitude=longitude, searchRadius=searchRadius, carImagesrc=carImagesrc, street=request.form["street"], city=request.form["city"], state=request.form["state"], make=request.form["make"], model=request.form["model"], model_year=request.form["model_year"], licence_plate=request.form["licence_plate"], color=request.form["color"])
 
 if __name__ == "__main__":

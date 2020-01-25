@@ -13,6 +13,9 @@ def getVehicleImage(make="ford",model="focus",year="2012"):
 
     return picSrcList
 
+def milestoMeters(inMiles):
+    return inMiles * 1609.344
+
 def getCenterCoordinates(address="1600+Amphitheatre+Parkway",city="Mountain+View",state="CA",country="US"):
     address = address.replace(" ","+")
     city = city.replace(" ","+")
@@ -34,5 +37,33 @@ def getSearchRadius(make="ford",model="focus",year="2012"):
     cityMPG = float(cityMPG[0].text.strip(" mpg"))
     hwMPG = float(hwMPG[0].text.strip(" mpg"))
     searchRadius = (cityMPG + hwMPG) / 2 * fuelCap
-    searchRadiusInMeters = searchRadius * 1609.344
-    return searchRadiusInMeters
+    return milestoMeters(searchRadius)
+
+def fuelEconomyVehicleImage(make="ford",model="focus",year="2012"):
+    pageLink = f"https://www.fueleconomy.gov/feg/bymodel/{year}_{make}_{model}.shtml"
+    response = requests.get(pageLink)
+    root = html.fromstring(response.content)
+    vehicleImages = [f"https://www.fueleconomy.gov{image.attrib['src']}" for image in root.xpath('//div[@id="main-content"]/div[@class="row"]/table/tbody/tr/td[contains(@class,"vphoto")]/img[not(@src[contains(.,"Electric")])]')]
+    return vehicleImages
+
+def fuelEconomySearchRadius(make="ford",model="focus",year="2012"):
+    baseURL = "https://www.fueleconomy.gov/feg"
+    pageLink = f"{baseURL}/bymodel/{year}_{make}_{model}.shtml"
+    response = requests.get(pageLink)
+    root = html.fromstring(response.content)
+    vehicleExt = root.xpath('//a[@class="ymm" and not(contains(text(),"Electric"))]')[0].attrib["href"].replace("..","")
+    response = requests.get(f"{baseURL}{vehicleExt}")
+    root = html.fromstring(response.text)
+    finalPageExt = root.xpath('//a[@role="button" and contains(@href,"action=sbs&id")]')[0].attrib["href"]
+    response = requests.get(f"https://www.fueleconomy.gov{finalPageExt}")
+    root = html.fromstring(response.content)
+    mpg = float(root.xpath('//td[@class="combinedMPG"]')[0].text_content().split(":")[1])
+    tankSize = root.xpath('//td[preceding-sibling::th[text()="Tank Size"]]')[0].text
+    print(tankSize)
+    tankSize = tankSize.split(" ")[0]
+    print("SANDWHICH")
+    print(tankSize)
+    print("SAMMICH")
+    tankSize = float(tankSize)
+    searchRadius = round(mpg * tankSize,2)
+    return milestoMeters(searchRadius)
